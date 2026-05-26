@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mi TODO</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <h1>Mi <span>TODO</span></h1>
+  <div class="header-stats" id="stats"></div>
+</header>
+
+<div class="toolbar">
+  <span class="filter-label">Filtrar:</span>
+  <button class="filter-btn active" data-cat="todas" onclick="setFilter('todas')">Todas</button>
+  <button class="filter-btn" data-cat="personal" onclick="setFilter('personal')">Personal</button>
+  <button class="filter-btn" data-cat="domestico" onclick="setFilter('domestico')">Dom&eacute;stico</button>
+  <button class="filter-btn" data-cat="laboral" onclick="setFilter('laboral')">Laboral</button>
+  <button class="filter-btn" data-cat="otro" onclick="setFilter('otro')">Otro</button>
+  <button class="filter-btn overdue-toggle" id="overdueToggle" onclick="toggleOverdue()" title="Solo tareas vencidas">&#9888; Vencidas</button>
+  <input type="search" class="search-input" id="searchInput" placeholder="&#128269; Buscar en t&iacute;tulo y notas..." oninput="onSearchInput(this.value)" />
+  <button class="add-btn" onclick="openModal()">+ Nueva tarea</button>
+</div>
+
+<div class="board">
+  <div class="column col-pendiente">
+    <div class="column-header"><h2>&#x1F4CB; Pendiente</h2><span class="col-count" id="cnt-pendiente">0</span></div>
+    <div class="cards-area" id="col-pendiente"></div>
+  </div>
+  <div class="column col-critico">
+    <div class="column-header"><h2>&#x1F534; Cr&iacute;tico</h2><span class="col-count" id="cnt-critico">0</span></div>
+    <div class="cards-area" id="col-critico"></div>
+  </div>
+  <div class="column col-progreso">
+    <div class="column-header"><h2>&#x26A1; En progreso</h2><span class="col-count" id="cnt-progreso">0</span></div>
+    <div class="cards-area" id="col-progreso"></div>
+  </div>
+  <div class="column col-hoy">
+    <div class="column-header"><h2>&#x2600;&#xFE0F; Hoy</h2><span class="col-count" id="cnt-hoy">0</span></div>
+    <div class="cards-area" id="col-hoy"></div>
+  </div>
+  <div class="column col-hecho" id="col-hecho-wrap">
+    <div class="column-header">
+      <div class="header-left" onclick="toggleDone()">
+        <h2>&#x2705; Completado</h2>
+        <span class="col-count" id="cnt-hecho">0</span>
+      </div>
+      <button class="clear-done-btn" id="clearDoneBtn" onclick="clearCompleted(event)" title="Eliminar todas las tareas completadas">&#128465; Limpiar</button>
+      <button class="collapse-btn" id="collapse-btn" title="Colapsar" onclick="toggleDone()">&#x25B2;</button>
+      <span class="col-title-vert" onclick="toggleDone()">&#x2705; Completado</span>
+    </div>
+    <div class="cards-area" id="col-hecho"></div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Nueva tarea</h3>
+    <div class="form-group">
+      <label>T&iacute;tulo *</label>
+      <input type="text" id="fTitle" placeholder="&iquest;Qu&eacute; hay que hacer?" />
+    </div>
+    <div class="form-group">
+      <label>Notas</label>
+      <textarea id="fNotes" placeholder="Detalles opcionales..."></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Categor&iacute;a</label>
+        <select id="fCat">
+          <option value="personal">Personal</option>
+          <option value="domestico">Dom&eacute;stico</option>
+          <option value="laboral">Laboral</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Prioridad</label>
+        <select id="fPriority">
+          <option value="altisima">Alt&iacute;sima</option>
+          <option value="alta">Alta</option>
+          <option value="media" selected>Media</option>
+          <option value="baja">Baja</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Estado</label>
+        <select id="fStatus">
+          <option value="pendiente">Pendiente</option>
+          <option value="critico">Cr&iacute;tico</option>
+          <option value="progreso">En progreso</option>
+          <option value="hoy">Hoy</option>
+          <option value="hecho">Completado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Fecha l&iacute;mite</label>
+        <input type="date" id="fDue" />
+      </div>
+    </div>
+    <p class="form-hint" id="formCreatedHint" style="display:none"></p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveTask()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
