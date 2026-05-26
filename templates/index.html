@@ -12,6 +12,13 @@
 <header>
   <h1>Mi <span>TODO</span></h1>
   <div class="header-stats" id="stats"></div>
+  {% if user %}
+  <div class="user-chip">
+    {% if user.picture %}<img src="{{ user.picture }}" alt="" referrerpolicy="no-referrer">{% endif %}
+    <span class="user-email">{{ user.email }}</span>
+    <a class="logout-btn" href="{{ url_for('logout') }}">Salir</a>
+  </div>
+  {% endif %}
 </header>
 
 <div class="toolbar">
